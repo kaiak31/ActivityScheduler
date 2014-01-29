@@ -35,8 +35,6 @@ private Integer capacity;
 @Column(nullable = false)
 private String description;
 
-@OneToMany(fetch = FetchType.LAZY,cascade=CascadeType.ALL, mappedBy="activity")
-private List<Slot> slots; 
 
 protected Activity() {}
 
@@ -71,26 +69,9 @@ public Activity(Long merchantId, String description){
         this.description = description;
     }
     
-    public void addSlot(Slot slot){
-        if(this.slots == null){
-            this.slots = new ArrayList<>();
-        }
-        this.slots.add(slot);
-    }
 
-    /**
-     * @return the slots
-     */
-    public List<Slot> getSlots() {
-        return slots;
-    }
 
-    /**
-     * @param slots the slots to set
-     */
-    public void setSlots(List<Slot> slots) {
-        this.slots = slots;
-    }
+
 
     /**
      * @return the capacity

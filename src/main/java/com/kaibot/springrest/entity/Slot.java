@@ -29,10 +29,11 @@ public class Slot {
     private Integer spaces;
     
     @Temporal(javax.persistence.TemporalType.DATE)
+    @Column
     private Date date;
     
     @ManyToOne
-    @JoinColumn(name="activity")
+    @JoinColumn(name = "activityId", nullable = false)
     private Activity activity;
 
     public Slot(){}
@@ -40,13 +41,13 @@ public class Slot {
     public Slot(Activity activity, DateTime date){
         this.date = date.toDate();
         this.activity = activity;
-        this.spaces = activity.getCapacity();
+        this.setSpaces(activity.getCapacity());
     }
     
      public Slot(Activity activity, DateTime date, int spaces){
         this.date = date.toDate();
         this.activity = activity;
-        this.spaces = spaces;
+        this.setSpaces(spaces);
     }
             
     
@@ -91,5 +92,12 @@ public class Slot {
     public void setId(Long id) {
         this.id = id;
     }
-    
+
+    public Integer getSpaces() {
+        return spaces;
+    }
+
+    public void setSpaces(Integer spaces) {
+        this.spaces = spaces;
+    }
 }

@@ -8,6 +8,9 @@ import com.kaibot.springrest.entity.Activity;
 import com.kaibot.springrest.entity.Slot;
 import com.kaibot.springrest.repository.ActivityRepository;
 import com.kaibot.springrest.repository.SlotRepository;
+
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,7 +47,16 @@ public class ScheduleServiceImpl implements ScheduleServiceIF, InitializingBean{
     
     @Override
     public List<Slot> checkAvailiablityDay(DateTime date, Activity activity) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        DateTime start = date.withTimeAtStartOfDay();
+        DateTime finish = start.plusDays(1);
+        List<Slot> raw = slotRepo.findByActivityIdAndDateRange(activity.getId(), start.toDate(), finish.toDate());
+        List<Slot> available = new ArrayList<>();
+        for(Slot slot: raw){
+            if(slot.getSpaces() == null || slot.getSpaces() > 0){
+                available.add(slot);
+            }
+        }
+        return available;
     }
 
     @Override

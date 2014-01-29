@@ -39,7 +39,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class Application {
     public static void main(String[] args) {
             //SpringApplication.run(Application.class, args);
-            AbstractApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
+            /*AbstractApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
             
             ScheduleServiceIF scheduleService = context.getBean(ScheduleServiceIF.class);
             ActivityRepository repository = context.getBean(ActivityRepository.class);
@@ -48,13 +48,14 @@ public class Application {
             a.addSlot(new Slot(a, new DateTime()));
             repository.save(a);
             List<Activity> list = scheduleService.findAllActivities();
-            
+
             for(Activity activity: list){
                 activity = scheduleService.reattach(activity);
                 activity.getSlots().size();
                 System.out.println("THis is the slot "+activity.getSlots().size());
             }
             context.close();
+             */
     }
     
     @Bean

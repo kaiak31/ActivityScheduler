@@ -18,7 +18,12 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SlotRepository  extends CrudRepository<Slot, Long>{
-    @Query("select sl from Slot sl where sl.activity = ?1 and sl.date >= ?2 and sl.date <= ?3")
-    public List<Slot> findByActivityAndDateRange(Activity activity, Date start, Date end);
-    public List<Slot> findByActivityAndDate(Activity activity, Date day);
+    @Query("select sl from Slot sl where sl.activity.id = ?1 and (sl.date BETWEEN ?2 AND ?3)")
+    public List<Slot> findByActivityIdAndDateRange(long activityId, Date start, Date end);
+
+    public List<Slot> findByActivityId(long activityId);
+    @Override
+    public List<Slot> findAll();
 }
+
+
