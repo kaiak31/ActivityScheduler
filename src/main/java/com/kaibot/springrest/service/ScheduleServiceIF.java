@@ -15,8 +15,9 @@ import org.joda.time.DateTime;
  * @author kaiak31
  */
 public interface ScheduleServiceIF{
+    public Activity createActivity(Long merchantId, String description);
     public List<Slot> checkAvailiablityDay( DateTime date,Activity activity);
-    public List<Slot> checkAvailibilityByDateRange(DateTime start, DateTime end, Activity activity);
+    public List<Slot> checkAvailibilityByDateRange(Activity activity, DateTime start, DateTime end);
     public boolean createBooking(DateTime date, Activity activity);
     public boolean removeAvailability(Activity activity, DateTime date);
     public boolean addAvailability(Activity activity, DateTime date);

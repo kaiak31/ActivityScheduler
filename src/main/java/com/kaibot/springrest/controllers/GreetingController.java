@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.kaibot.springrest;
+package com.kaibot.springrest.controllers;
 
 import com.kaibot.springrest.entity.Greeting;
 import java.util.concurrent.atomic.AtomicLong;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class GreetingController {
      private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+     private final AtomicLong counter = new AtomicLong();
 
     @RequestMapping("/greeting")
     public @ResponseBody Greeting greeting(
@@ -26,4 +26,6 @@ public class GreetingController {
         return new Greeting(counter.incrementAndGet(),
                             String.format(template, name));
     }
+
+
 }

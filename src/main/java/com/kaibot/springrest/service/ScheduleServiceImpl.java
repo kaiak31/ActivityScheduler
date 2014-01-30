@@ -10,7 +10,6 @@ import com.kaibot.springrest.repository.ActivityRepository;
 import com.kaibot.springrest.repository.SlotRepository;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -44,7 +43,15 @@ public class ScheduleServiceImpl implements ScheduleServiceIF, InitializingBean{
     public void afterPropertiesSet() throws Exception {
         setEntityManager(entityManagerFactory.createEntityManager());
     }
-    
+
+    @Override
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public Activity createActivity(Long merchantId, String description) {
+        Activity activity = new Activity(merchantId,description);
+        activity = activityRepo.save(activity);
+        return activity;
+    }
+
     @Override
     public List<Slot> checkAvailiablityDay(DateTime date, Activity activity) {
         DateTime start = date.withTimeAtStartOfDay();
@@ -60,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleServiceIF, InitializingBean{
     }
 
     @Override
-    public List<Slot> checkAvailibilityByDateRange(DateTime start, DateTime end, Activity activity) {
+    public List<Slot> checkAvailibilityByDateRange(Activity activity, DateTime start, DateTime end) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
