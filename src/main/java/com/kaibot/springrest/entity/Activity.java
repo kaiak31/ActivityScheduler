@@ -30,12 +30,12 @@ private Integer capacity;
 private String description;
 
 @Column(nullable=true)
-private int duration;
+private Integer duration;
 
 protected Activity() {}
 
     //It would be better to use a Builder pattern for this but that is beyond the scope of this project
-public Activity(Long merchantId, String description, int duration){
+public Activity(Long merchantId, String description, Integer duration){
       this.setMerchantId(merchantId);
       this.description = description;
       this.duration = duration;
@@ -108,7 +108,7 @@ public Activity(Long merchantId, String description){
     }
 
 
-    public int getDuration() {
+    public Integer getDuration() {
         return duration;
     }
 

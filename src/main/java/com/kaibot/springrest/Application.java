@@ -5,6 +5,9 @@
 package com.kaibot.springrest;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.kaibot.springrest.entity.Activity;
 import com.kaibot.springrest.entity.Slot;
 import com.kaibot.springrest.repository.ActivityRepository;
@@ -21,6 +24,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -29,6 +35,11 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
 /**
  *
  * @author kaiak31
@@ -72,6 +83,18 @@ public class Application {
         return txManager;
     }
 
-    
+    @Bean
+    public ObjectMapper objectMapper(){
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JodaModule());
+        objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS,false);
+        objectMapper.configure(SerializationFeature.WRITE_NULL_MAP_VALUES, true);
+        objectMapper.configure(SerializationFeature.EAGER_SERIALIZER_FETCH, false);
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS,false);
+
+        return objectMapper;
+    }
+
+
     
 }

@@ -15,6 +15,7 @@ import org.junit.rules.ExpectedException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 
+import javax.persistence.EntityExistsException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,9 +87,13 @@ public class ScheduleServiceImplTest extends TestCase{
         //Adding slots
         Slot nullOwnerSlot = scheduleService.addSlot(activity.getId(), new DateTime(), null);
         assertNotNull(nullOwnerSlot);
-        nullOwnerSlot = scheduleService.addSlot(activity.getId(), nullOwnerSlot.getScheduledDate(), null);
-        //There is an overlapping slot of the same Activity, can't add here.
-        assertNull(nullOwnerSlot);
+        try{
+            //There is an overlapping slot of the same Activity, can't add here.
+            nullOwnerSlot = scheduleService.addSlot(activity.getId(), nullOwnerSlot.getScheduledDate(), null);
+        }
+        catch (EntityExistsException ex){
+            assertTrue(true);
+        }
 
     }
 
@@ -99,9 +104,13 @@ public class ScheduleServiceImplTest extends TestCase{
         //owner.setOwnerId(ownerId);
         owner = slotRepo.save(owner);
         assertNotNull(owner);
-
-        Slot newOwner = scheduleService.addSlot(activity.getId(), new DateTime(), ownerId);
-        assertNull(newOwner);
+        Slot newOwner;
+        try{
+            newOwner  = scheduleService.addSlot(activity.getId(), new DateTime(), ownerId);
+        }
+        catch (EntityExistsException ex){
+            assertTrue(true);
+        }
         newOwner = scheduleService.addSlot(activity.getId(), owner.getScheduledDate(), 786L);
         assertNotNull(newOwner);
     }
@@ -110,7 +119,7 @@ public class ScheduleServiceImplTest extends TestCase{
     /* Checking Availability of by a Specific Day
      *
      */
-    @Test
+    @Test   (expected = IllegalArgumentException.class)
     public void testCheckAvailability(){
         DateTime startTime = new DateTime();
         Slot owner = scheduleService.addSlot(activity.getId(), startTime, ownerId);

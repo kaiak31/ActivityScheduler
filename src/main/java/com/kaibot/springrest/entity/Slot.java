@@ -4,6 +4,7 @@
  */
 package com.kaibot.springrest.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.Date;
  * @author kaiak31
  */
 
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Table(
         uniqueConstraints=
         @UniqueConstraint(columnNames={"activityId", "ownerId"})
@@ -21,28 +23,34 @@ import java.util.Date;
 public class Slot {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(updatable = false,insertable = false)
     private Long id;
 
 
     @Column(nullable = true)
     private Long ownerId;
 
+    @Column(nullable=true)
+    private Integer duration;
+
     @Column(nullable = true)
     private Integer spaces;
 
-    @Temporal(javax.persistence.TemporalType.DATE)
-    @Column
+
+    @Temporal(TemporalType.DATE)
+    @Column(updatable = false)
     private Date date;
 
-    @ManyToOne
-    @JoinColumn(name = "activityId", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "activityId", nullable = false,updatable = false)
     private Activity activity;
 
     protected Slot(){}
 
     public Slot(Activity activity, DateTime date) {
         this.activity = activity;
-        this.setSpaces(activity.getCapacity());
+        this.spaces = activity.getCapacity();
+        this.duration = activity.getDuration();
         this.date = date.toDate();
     }
 
@@ -118,5 +126,13 @@ public class Slot {
             }
         }
         return false;
+    }
+
+    public Integer getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 }
