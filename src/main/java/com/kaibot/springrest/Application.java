@@ -39,7 +39,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableJpaRepositories("com.kaibot")
 public class Application {
     public static void main(String[] args) {
-            SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
     
     @Bean
@@ -52,7 +52,7 @@ public class Application {
         LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
         lef.setDataSource(dataSource);
         lef.setJpaVendorAdapter(jpaVendorAdapter);
-        lef.setPackagesToScan("com.kaibot.sprintrest");
+        lef.setPackagesToScan("com.kaibot.springrest");
         return lef;
     }
 

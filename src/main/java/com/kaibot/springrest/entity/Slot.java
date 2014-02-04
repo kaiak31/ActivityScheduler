@@ -4,53 +4,49 @@
  */
 package com.kaibot.springrest.entity;
 
-import java.util.Date;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Temporal;
 import org.joda.time.DateTime;
 
+import javax.persistence.*;
+import java.util.Date;
+
 /**
- *
  * @author kaiak31
  */
+
+@Table(
+        uniqueConstraints=
+        @UniqueConstraint(columnNames={"activityId", "ownerId"})
+)
 @Entity
 public class Slot {
     @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
+
+    @Column(nullable = true)
+    private Long ownerId;
+
     @Column(nullable = true)
     private Integer spaces;
-    
+
     @Temporal(javax.persistence.TemporalType.DATE)
     @Column
     private Date date;
-    
+
     @ManyToOne
     @JoinColumn(name = "activityId", nullable = false)
     private Activity activity;
 
-    public Slot(){}
-    
-    public Slot(Activity activity, DateTime date){
-        this.date = date.toDate();
+    protected Slot(){}
+
+    public Slot(Activity activity, DateTime date) {
         this.activity = activity;
         this.setSpaces(activity.getCapacity());
-    }
-    
-     public Slot(Activity activity, DateTime date, int spaces){
         this.date = date.toDate();
-        this.activity = activity;
-        this.setSpaces(spaces);
     }
-            
-    
+
+
     /**
      * @return the activity
      */
@@ -99,5 +95,28 @@ public class Slot {
 
     public void setSpaces(Integer spaces) {
         this.spaces = spaces;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public boolean equals(Object obj) {
+        if (obj instanceof Slot) {
+            Slot s1 = (Slot) obj;
+            if (s1.id.longValue() == this.id.longValue()) {
+                return true;
+            }
+            if (s1.activity.equals(this.activity)) {
+                if (s1.ownerId.longValue() == this.ownerId.longValue()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

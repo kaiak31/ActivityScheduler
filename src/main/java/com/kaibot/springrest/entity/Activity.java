@@ -4,24 +4,18 @@
  */
 package com.kaibot.springrest.entity;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.transaction.Transactional;
 
 /**
  *
  * @author kaiak31
  */
 @Entity
-public class Activity {
+public class Activity{
 
 @Id
 @GeneratedValue(strategy=GenerationType.AUTO)
@@ -35,13 +29,23 @@ private Integer capacity;
 @Column(nullable = false)
 private String description;
 
+@Column(nullable=true)
+private int duration;
 
 protected Activity() {}
 
-public Activity(Long merchantId, String description){
-      this.merchantId = merchantId;
+    //It would be better to use a Builder pattern for this but that is beyond the scope of this project
+public Activity(Long merchantId, String description, int duration){
+      this.setMerchantId(merchantId);
       this.description = description;
+      this.duration = duration;
 }
+
+
+public Activity(Long merchantId, String description){
+       this(merchantId, description, 0);
+ }
+
 
     public Long getId() {
         return id;
@@ -85,5 +89,30 @@ public Activity(Long merchantId, String description){
      */
     public void setCapacity(Integer capacity) {
         this.capacity = capacity;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o instanceof Activity){
+            return (this.getMerchantId().equals(((Activity) o).getMerchantId()) && this.getDescription().equals(((Activity)o).getDescription()));
+        }
+        return false;
+    }
+
+    public Long getMerchantId() {
+        return merchantId;
+    }
+
+    public void setMerchantId(Long merchantId) {
+        this.merchantId = merchantId;
+    }
+
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Integer duration) {
+        this.duration = duration;
     }
 }

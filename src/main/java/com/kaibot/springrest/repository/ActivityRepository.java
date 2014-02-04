@@ -18,6 +18,8 @@ import org.springframework.stereotype.Repository;
 public interface ActivityRepository extends CrudRepository<Activity, Long>{
     @Override
     public List<Activity> findAll();
+
+    public Activity findByMerchantIdAndDescription(long merchantId, String description);
     
     
 }

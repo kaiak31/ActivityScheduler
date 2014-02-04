@@ -8,20 +8,22 @@ import com.kaibot.springrest.entity.Activity;
 import com.kaibot.springrest.entity.Slot;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.EntityExistsException;
+
 import org.joda.time.DateTime;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author kaiak31
  */
+
 public interface ScheduleServiceIF{
-    public Activity createActivity(Long merchantId, String description);
-    public List<Slot> checkAvailiablityDay( DateTime date,Activity activity);
-    public List<Slot> checkAvailibilityByDateRange(Activity activity, DateTime start, DateTime end);
-    public boolean createBooking(DateTime date, Activity activity);
-    public boolean removeAvailability(Activity activity, DateTime date);
-    public boolean addAvailability(Activity activity, DateTime date);
-    public void addAvailabilityRange(Activity activity, DateTime start, DateTime end);
+    public Activity createActivity(Long merchantId, String description,int minutes) throws EntityExistsException;
+    public List<Slot> checkAvailabilityDay(DateTime date,Long activityId);
+    public List<Slot> checkAvailabilityByDateRange(Activity activity, DateTime start, DateTime end);
+    public Slot bookSlot(Long slotId, int spaces);
+    public Slot addSlot(Long activityId, DateTime date, Long ownerId);
     public List<Activity> findAllActivities();
     public <T extends Object> T reattach(T obj);
     public <T extends Object> void save( T obj);
